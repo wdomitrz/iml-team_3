@@ -1,0 +1,16 @@
+authorName: sewerynkarolina
+experimentName: Booking Canellation
+trialConcurrency: 1
+maxExecDuration: 5h
+maxTrialNum: 1000
+trainingServicePlatform: local
+searchSpacePath: search_space.json
+useAnnotation: false
+tuner: 
+  builtinTunerName: TPE
+  classArgs:
+    optimize_mode: maximize
+trial:
+  command: python3 run_trials.py
+  codeDir: .
+  gpuNum: 1 
