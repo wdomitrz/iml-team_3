@@ -1,6 +1,6 @@
 authorName: sewerynkarolina
 experimentName: Booking Canellation
-trialConcurrency: 1
+trialConcurrency: 7
 maxExecDuration: 5h
 maxTrialNum: 1000
 trainingServicePlatform: local
@@ -13,4 +13,4 @@ tuner:
 trial:
   command: python3 run_trials.py
   codeDir: .
-  gpuNum: 1 
+  gpuNum: 0 
