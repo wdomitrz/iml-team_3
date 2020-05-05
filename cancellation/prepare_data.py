@@ -22,12 +22,14 @@ def get_integer_mapping(le):
     return res
 
 def prepare_dataset(df):
+    df = df.fillna(0)
     month_name_to_num = {name: num for num, name in enumerate(calendar.month_name) if num}
     df['arrival_date_month'] = [month_name_to_num[x] for x in df['arrival_date_month']]
     df["arrival_weekday"] = [calendar.weekday(df.loc[i, 'arrival_date_year'], df.loc[i, 'arrival_date_month'], \
         df.loc[i, 'arrival_date_day_of_month']) for i in df.index]
-    df = df.drop(["country", "agent", "company", "reservation_status_date", "reservation_status", "hotel", \
-        "arrival_date_year"], axis=1)
+    df = df.drop(["country", "agent", "company", "reservation_status_date", "reservation_status", \
+        "arrival_date_year", "assigned_room_type", "reserved_room_type"], axis=1)
+    print(df.head())
     feature_type = df.dtypes
     object_features = [i for i in feature_type.index if feature_type[i] == 'object']
     dict_trans = dict()
