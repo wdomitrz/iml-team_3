@@ -55,7 +55,16 @@ In this project, we have decided to focus on two first issues.
 
 ### Model 1. Booking cancellation
 
-The aim of this model is to predict whether guest cancels reservation and explanation of the reasons. The chosen model is XGBoost with RFE (Recursive Feature Elimination). Bayesian optimisation with TPE tuner has been applied in order to improve model performance. Neural Network Intelligence (NNI) package has been chosen for this task, because it provides user-friendly GUI with summary of experiments.
+The aim of this model is to predict whether guest cancels reservation and explanation of the reasons. The chosen model is XGBoost with RFE (Recursive Feature Elimination). Table [nr] details split of dataset. 
+
+|   | Train  | Test  |
+|---|---|---|
+|**Number of observations** | 89542 | 29848 |
+|**Number of events** | 33137 (37%)| 11087 (37%)|
+
+
+
+Bayesian optimisation with TPE tuner has been applied in order to improve model performance. Neural Network Intelligence (NNI) package has been chosen for this task, because it provides user-friendly GUI with summary of experiments.
 
 List of optimized hyperparameters and search space:
 
@@ -79,6 +88,10 @@ List of optimized hyperparameters and search space:
 
 
 ![image](images/03_roc_curve.png)
+
+In order to investigate which variables are important in an interpretable model decision tree classifier was trained. It turned out that splits were made by features which are also important in blackbox model (xgboost). More details on this are given below.
+
+![image](images/03_decision_tree.png)
 
 ### Model 2. Repeated guests
 
