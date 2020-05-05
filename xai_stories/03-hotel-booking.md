@@ -7,7 +7,35 @@
 ## Introduction 
 
 The dataset is downloaded from the Kaggle competition website https://www.kaggle.com/jessemostipak/hotel-booking-demand.
-This dataset contains booking information for a city hotel and a resort hotel in Portugal, and includes information such as when the booking was made, length of stay, the number of adults, children, babies, the number of available parking spaces, chosen meals, price etc. There are 32 features and 119 390 observations. The booking website has information about these reservation characteristics and building models can help this company in better offer management. The most important information could be 
+This dataset contains booking information for a city hotel and a resort hotel in Portugal, and includes information such as when the booking was made, length of stay, the number of adults, children, babies, the number of available parking spaces, chosen meals, price etc. There are 119 390 observations and 32 features. Below you can find features which were used in modelling. Furthermore, feature *arrival_weekday* was added.
+
+| | Feature  | Description  |
+|---|---|---|
+| 1 | hotel  | Resort hotel or city hotel |
+| 2 |is_canceled  | Value indicating if the booking was canceled (1) or not (0) |
+| 3 | lead_time  | Number of days that elapsed between the reservation and the arrival date |
+| 4 |arrival_date_month | Month of arrival date |
+| 5 | arrival_date_week_number | Week number of year for arrival date |
+| 6| stays_in_weekend_nights | Number of weekend nights (Saturday or Sunday) the guest stayed or booked to stay at the hotel |
+| 7| stays_in_week_nights | Number of week nights (Monday to Friday) the guest stayed or booked to stay at the hotel|
+| 8 | adults | Number of adults |
+| 9 | children | Number of children |
+| 10 | babies | Number of babies |
+| 11|meal | Type of meal booked |
+| 12 |is_repeated_guest | Value indicating if the booking name was from a repeated guest |
+| 13|previous_cancellations | Number of previous bookings that were cancelled by the customer prior to the current booking |
+| 14|previous_bookings_not_canceled | Number of previous bookings not cancelled by the customer prior to the current booking |
+| 15|booking_changes | Number of changes made to the booking from the moment the booking was entered on the PMS until the moment of check-in or cancellation |
+| 16| deposit_type | Indication on if the customer made a deposit to guarantee the booking. This variable can assume three categories: No Deposit – no deposit was made; Non Refund – a deposit was made in the value of the total stay cost; Refundable – a deposit was made with a value under the total cost of stay |
+| 17| days_in_waiting_list | Number of days the booking was in the waiting list before it was confirmed to the customer |
+| 18| adr | Average Daily Rate as defined by dividing the sum of all lodging transactions by the total number of staying nights |
+| 19 | required_car_parking_spaces | Number of car parking spaces required by the customer |
+|20 | total_of_special_requests |Number of special requests made by the customer (e.g. twin bed or high floor)|
+| 21 | market_segment | Market segment designation. In categories, the term “TA” means “Travel Agents” and “TO” means “Tour Operators” |
+| 22 | customer_type |Contract - when the booking has an allotment or other type of contract associated to it; Group – when the booking is associated to a group; Transient – when the booking is not part of a group or contract, and is not associated to other transient booking; Transient-party – when the booking is transient, but is associated to at least other transient booking|
+| 23 | distribution_channel | Booking distribution channel. The term “TA” means “Travel Agents” and “TO” means “Tour Operators” |
+
+The booking website has information about these reservation characteristics and building models can help this company in better offer management. The most important information could be 
 
 * the prediction of booking cancellation, 
 * the prediction if client comes back to the hotel,
@@ -15,6 +43,7 @@ This dataset contains booking information for a city hotel and a resort hotel in
 * customer segmentation.
 
 In this project, we have decided to focus on two first issues.
+
 
 ### Hyperparameter optimization
 
@@ -36,10 +65,10 @@ List of optimized hyperparameters and search space:
 4. **colsample_bytree** - subsample ratio of columns when constructing each tree.
 
 
-![image](images/hyperparameter_optimization.png)
+![image](images/03_hyperparameter_optimization.png)
 *Figure details paths of hyperparameters values chosen by algorithm. On the right you can see metric (AUC) of model with those parameters.*
 
-![image](images/ho2.png)
+![image](images/03_ho2.png)
 *Figure presents AUC for each experiment. It shows a clear trend in model performence so algorithm is choosing better and better hyperparameters.*
 
 
@@ -49,7 +78,7 @@ List of optimized hyperparameters and search space:
 |AUC test   |   |   |
 
 
-![image](images/roc_curve.png)
+![image](images/03_roc_curve.png)
 
 ### Model 2. Repeated guests
 
@@ -59,11 +88,11 @@ Place a description of the model(s) here. Focus on key information on the design
 
 ### Model 1. Booking cancellation
 
-#### dataset
+#### Dataset level
 
-![image](images/feature_importance.png)
+![image](images/03_feature_importance.png)
 
-![image](images/shap_summary_plot.png)
+![image](images/03_shap_summary_plot.png)
 *.*
 
 Figure above shows SHAP values. There are some interesting findings which are intuitive:
@@ -79,14 +108,14 @@ There are also less intuitive findings:
 * If trip starts at the end of the week there is higher probability that customers change their minds.
 * The bigger number of adults, the highest probability of cancellation.
 
-#### instance
+#### Instance level
 
 1. The lowest prediction of cancellation probability
-![image](images/shap_min.png)
-![image](images/min_break_down.png)
+![image](images/03_shap_min.png)
+![image](images/03_min_break_down.png)
 2. The highest prediction of cancellation probability
-![image](images/shap_max.png)
-![image](images/max_break_down.png)
+![image](images/03_shap_max.png)
+![image](images/03_max_break_down.png)
    
 ### Model 2. Repeated guests
 
