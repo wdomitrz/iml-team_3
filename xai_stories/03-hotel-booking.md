@@ -25,15 +25,15 @@ This dataset contains booking information for a city hotel and a resort hotel in
 | 12 |is_repeated_guest | Value indicating if the booking name was from a repeated guest |
 | 13|previous_cancellations | Number of previous bookings that were cancelled by the customer prior to the current booking |
 | 14|previous_bookings_not_canceled | Number of previous bookings not cancelled by the customer prior to the current booking |
-| 15|booking_changes | Number of changes made to the booking from the moment the booking was entered on the PMS until the moment of check-in or cancellation |
-| 16| deposit_type | Indication on if the customer made a deposit to guarantee the booking. This variable can assume three categories: No Deposit – no deposit was made; Non Refund – a deposit was made in the value of the total stay cost; Refundable – a deposit was made with a value under the total cost of stay |
+| 15|booking_changes | Number of changes made to the booking|
+| 16| deposit_type | Indication on if the customer made a deposit to guarantee the booking. Three categories: No Deposit – no deposit was made; Non Refund – a deposit was made in the value of the total stay cost; Refundable – a deposit was made with a value under the total cost of stay |
 | 17| days_in_waiting_list | Number of days the booking was in the waiting list before it was confirmed to the customer |
 | 18| adr | Average Daily Rate as defined by dividing the sum of all lodging transactions by the total number of staying nights |
 | 19 | required_car_parking_spaces | Number of car parking spaces required by the customer |
 |20 | total_of_special_requests |Number of special requests made by the customer (e.g. twin bed or high floor)|
-| 21 | market_segment | Market segment designation. In categories, the term “TA” means “Travel Agents” and “TO” means “Tour Operators” |
-| 22 | customer_type |Contract - when the booking has an allotment or other type of contract associated to it; Group – when the booking is associated to a group; Transient – when the booking is not part of a group or contract, and is not associated to other transient booking; Transient-party – when the booking is transient, but is associated to at least other transient booking|
-| 23 | distribution_channel | Booking distribution channel. The term “TA” means “Travel Agents” and “TO” means “Tour Operators” |
+| 21 | market_segment | Market segment designation.|
+| 22 | customer_type | Contract - when the booking has an allotment or other type of contract associated to it; Group – when the booking is associated to a group; Transient – when the booking is not part of a group or contract, and is not associated to other transient booking; Transient-party – when the booking is transient, but is associated to at least other transient booking|
+| 23 | distribution_channel | Booking distribution channel.  |
 
 The booking website has information about these reservation characteristics and building models can help this company in better offer management. The most important information could be 
 
@@ -47,13 +47,12 @@ In this project, we have decided to focus on two first issues.
 
 ### Imbalanced dataset
 
-[Put a description of the problem here. indicate the data source. Describe why this problem is important. Indicate the most important literature on the problem.]
 
 ## Model 
 
 ### Model 1. Booking cancellation
 
-The aim of this model is to predict whether guest cancels reservation and explanation of the reasons. The chosen model is XGBoost. Table [nr] details the split of dataset. 
+The aim of this model is to predict whether guest cancels reservation and explanation of the reasons. The chosen model is XGBoost. Table below details the split of dataset. 
 
 |   | Train  | Test  |
 |---|---|---|
@@ -72,27 +71,69 @@ List of optimized hyperparameters and chosen values:
 4. **colsample_bytree** - subsample ratio of columns when constructing each tree (0.78).
 
 
-Figure below shows ROC curve of chosen model. The essential advantages of the model are high AUC and the lack of overfiting.
+Figure  \@ref(fig:roc-curve)  below shows ROC curve of chosen model. The essential advantages of the model are high AUC and the lack of overfiting.
 
 ![image](images/03-roc_curve.png)
+
+<!---
+```{r roc-curve, echo=FALSE, fig.cap='XGBoost: ROC curve.', out.width = '50%', fig.align='center'}
+knitr::include_graphics("images/03-roc_curve.png")
+```
+-->
 
 In order to compare blackbox model with an interpretable model decision tree classifier was trained. It turned out that splits were made by features which are also important in blackbox model (xgboost). More details on this are given below.
 
 ![image](images/03-roc_tree.png)
+<!---
+```{r roc_curve_tree, echo=FALSE, fig.cap='Decision Tree: ROC curve.', out.width = '50%', fig.align='center'}
+knitr::include_graphics("images/03-roc_tree.png")
+```
+-->
+
 ![image](images/03-decision_tree.png)
 
-Let's take one observation and analyze prediction of two models. We have chosen observation number 187. Both models predicts high probability of cancellation (Decistion Tree:0.9940, Xgboost: 0.9982).
+<!---
+```{r decision_tree, echo=FALSE, fig.cap='White box model of booking cancellation: decision tree.', out.width = '50%', fig.align='center'}
+knitr::include_graphics("images/03-decision_tree.png")
+```
+-->
+
+Let's take one observation and analyze prediction of two models. We have chosen observation number 187. Both models predicts high probability of booking cancellation (Decision Tree:0.9940, Xgboost: 0.9982).
 
 ![image](images/03-obs.png)
 
-![image](images/03-ex1.png)
-![image](images/03-ex_lime.png)
+<!---
+```{r obs, echo=FALSE, fig.cap='The vector of feature values of chosen instance.', out.width = '50%', fig.align='center'}
+knitr::include_graphics("images/03-obs.png")
+```
+-->
 
-We can see that explaination of XGBoost model says that features chosen in decision tree have influence on prediction.
+
+![image](images/03-ex1.png)
+<!---
+```{r ex_breakdown, echo=FALSE, fig.cap='Break down plot explaining prediciton of chosen instance.', out.width = '50%', fig.align='center'}
+knitr::include_graphics("images/03-ex1.png")
+```
+-->
+
+![image](images/03-ex_lime.png)
+<!---
+```{r ex_lime, echo=FALSE, fig.cap='LIME plot explaining prediciton of chosen instance.', out.width = '50%', fig.align='center'}
+knitr::include_graphics("images/03-ex_lime.png")
+```
+-->
+
+We can see that explaination of XGBoost model says that features chosen in decision tree have also influence on prediction in XGBoost model. As shown illustrated in Figure \@ref(fig:ex_cp) if chosen client had not canceled reservation in the past, he/she would be less likely to cancel this reservation. What is more, if the client had booked hotel later, he/she would have known his plans better and it would decrease probability of cancellation. Maybe the client canceled booking because of big family event, accident or breaking up with partner (booking for 2 adults). It is impossible to predict those events in advance.
 
 ![image](images/03-ex_ceteris_paribus.png)
 
-The performance of Decision Tree is worse than XGBoost, so if the explanation of blackbox model is intuitive it is better to use model with higher AUC. 
+<!---
+```{r ex_cp, echo=FALSE, fig.cap='Ceteris Paribus plot explaining prediciton of chosen instance.', out.width = '50%', fig.align='center'}
+knitr::include_graphics("images/03-ex_ceteris_paribus.png")
+```
+-->
+
+What is the lesson from this example? The performance of Decision Tree is worse than XGBoost, so if the explanation of blackbox model is intuitive it is better to use model with higher AUC. 
 
 ### Model 2. Repeated guests
 
@@ -106,26 +147,37 @@ Place a description of the model(s) here. Focus on key information on the design
 
 ![image](images/03-feature_importance.png)
 
-Figure [] presents feature importance. The list of five most important features contains `deposit_type` and `previous_cancellations`. Intuition suggests that these are important variables in such a problem. There are also variables `required_car_parking_spaces`, `total_of_special_requests`, `market_segment` that will be analyzed later.
+<!---
+```{r feat_imp, echo=FALSE, fig.cap='Feature importance of XGBoost model.', out.width = '50%', fig.align='center'}
+knitr::include_graphics("images/03-feature_importance.png")
+```
+-->
+
+
+Figure \@ref(fig:feat_imp) presents feature importance. The list of five most important features contains `deposit_type` and `previous_cancellations`. Intuition suggests that these are important variables in such a problem. There are also variables `required_car_parking_spaces`, `total_of_special_requests`, `market_segment` that will be analyzed later.
 
 ![image](images/03-shap_summary_plot.png)
-*.*
+<!---
+```{r shap_summary_plot, echo=FALSE, fig.cap='Summary of SHAP values of XGBoost model.', out.width = '50%', fig.align='center'}
+knitr::include_graphics("images/03-shap_summary_plot.png")
+```
+-->
+
+
 
 Figure above shows SHAP values. There are some interesting findings which are intuitive:
 
 * Clients who canceled some reservations in  the past are more likely to cancel another reservation.
 * People who buy refundable option cancel reservations more often than others.
 * A lot of days between reservation time and arrival time increases probability of cancelling booking. 
-* TEgo nie: People who travel with children are more likely to cancel booking.
-* Trip personalization (parking spaces, special requesrts) makes prediction of cancellation be lower.
 * The longer trip, the higher probability of cancellation. 
 
 There are also less intuitive findings:
-
+* Trip personalization (parking spaces, special requesrts) makes prediction of cancellation be lower.
 * People without any special requests cancel reservetion more often than others.
 * If trip starts at the end of the week there is higher probability that customers change their minds.
-* The bigger number of adults, the higher probability of cancellation.
-* The probability od cancellation is lower if it is hotel in the city instead of resort hotel.
+* The higher number of adults, the higher probability of cancellation.
+* The probability of cancellation is lower if it is hotel in the city instead of resort hotel.
 
 #### Instance level
 
@@ -133,13 +185,13 @@ There are also less intuitive findings:
 ![image](images/03-shap_min.png)
 ![image](images/03-breakdown_min.png)
 
-The prediction of probability of cancellation equals 0. The plot of shap values shows that client has booked 1 visit and has not canceled it. The values of features `previous_cancelations`=0 and `previous_booking_not_canceled`=1  make the probability of cancel be lower
+The prediction of probability of cancellation equals 0. The plot of SHAP values shows that client has booked 1 visit and has not canceled it. The values of features `previous_cancelations`=0 and `previous_booking_not_canceled`=1  make the probability of cancel be lower.
 
-2. The highest prediction of cancellation probability
+1. The highest prediction of cancellation probability
 ![image](images/03-shap_max.png)
 ![image](images/03-breakdown_max.png)
 
-The prediction of probability of cancellation equals 1. In the past client canceled one reservation so it is more likely to cancel another one. 440 days between reservation and arrival date makes the probability of resignation be higher. It is intuitive, because the client could change plans.   
+The prediction of probability of cancellation equals 1. In the past client canceled one reservation so it is more likely to cancel another one. 440 days between reservation and arrival date makes the probability of resignation be higher. It is intuitive, because the client could have changed plans. Price per night reduces prediction. The value of 75 euro per night is cheap compared to the prices in the dataset. We can guess that due to the low price,  it may not be important for customers to cancel booking and wait for a refund.
 
 
 ### Model 2. Repeated guests
