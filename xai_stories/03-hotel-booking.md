@@ -45,8 +45,6 @@ The booking website has information about these reservation characteristics and 
 In this project, we have decided to focus on two first issues.
 
 
-### Hyperparameter optimization
-
 ### Imbalanced dataset
 
 [Put a description of the problem here. indicate the data source. Describe why this problem is important. Indicate the most important literature on the problem.]
@@ -55,7 +53,7 @@ In this project, we have decided to focus on two first issues.
 
 ### Model 1. Booking cancellation
 
-The aim of this model is to predict whether guest cancels reservation and explanation of the reasons. The chosen model is XGBoost with RFE (Recursive Feature Elimination). Table [nr] details split of dataset. 
+The aim of this model is to predict whether guest cancels reservation and explanation of the reasons. The chosen model is XGBoost. Table [nr] details the split of dataset. 
 
 |   | Train  | Test  |
 |---|---|---|
@@ -66,32 +64,35 @@ The aim of this model is to predict whether guest cancels reservation and explan
 
 Bayesian optimisation with TPE tuner has been applied in order to improve model performance. Neural Network Intelligence (NNI) package has been chosen for this task, because it provides user-friendly GUI with summary of experiments.
 
-List of optimized hyperparameters and search space:
+List of optimized hyperparameters and chosen values:
 
-1. **max_depth** - the maximum depth of tree.
-2. **n_esimators** - the number of trees.
-3. **learning_rate** - boosting learning rate
-4. **colsample_bytree** - subsample ratio of columns when constructing each tree.
-
-
-![image](images/03_hyperparameter_optimization.png)
-*Figure details paths of hyperparameters values chosen by algorithm. On the right you can see metric (AUC) of model with those parameters.*
-
-![image](images/03_ho2.png)
-*Figure presents AUC for each experiment. It shows a clear trend in model performence so algorithm is choosing better and better hyperparameters.*
+1. **max_depth** - the maximum depth of tree (4).
+2. **n_esimators** - the number of trees (499).
+3. **learning_rate** - boosting learning rate (0.1).
+4. **colsample_bytree** - subsample ratio of columns when constructing each tree (0.78).
 
 
-|   |   |   |
-|---|---|---|
-|AUC train |   |   |
-|AUC test   |   |   |
+Figure below shows ROC curve of chosen model. The essential advantages of the model are high AUC and the lack of overfiting.
 
+![image](images/03-roc_curve.png)
 
-![image](images/03_roc_curve.png)
+In order to compare blackbox model with an interpretable model decision tree classifier was trained. It turned out that splits were made by features which are also important in blackbox model (xgboost). More details on this are given below.
 
-In order to investigate which variables are important in an interpretable model decision tree classifier was trained. It turned out that splits were made by features which are also important in blackbox model (xgboost). More details on this are given below.
+![image](images/03-roc_tree.png)
+![image](images/03-decision_tree.png)
 
-![image](images/03_decision_tree.png)
+Let's take one observation and analyze prediction of two models. We have chosen observation number 187. Both models predicts high probability of cancellation (Decistion Tree:0.9940, Xgboost: 0.9982).
+
+![image](images/03-obs.png)
+
+![image](images/03-ex1.png)
+![image](images/03-ex_lime.png)
+
+We can see that explaination of XGBoost model says that features chosen in decision tree have influence on prediction.
+
+![image](images/03-ex_ceteris_paribus.png)
+
+The performance of Decision Tree is worse than XGBoost, so if the explanation of blackbox model is intuitive it is better to use model with higher AUC. 
 
 ### Model 2. Repeated guests
 
@@ -103,9 +104,11 @@ Place a description of the model(s) here. Focus on key information on the design
 
 #### Dataset level
 
-![image](images/03_feature_importance.png)
+![image](images/03-feature_importance.png)
 
-![image](images/03_shap_summary_plot.png)
+Figure [] presents feature importance. The list of five most important features contains `deposit_type` and `previous_cancellations`. Intuition suggests that these are important variables in such a problem. There are also variables `required_car_parking_spaces`, `total_of_special_requests`, `market_segment` that will be analyzed later.
+
+![image](images/03-shap_summary_plot.png)
 *.*
 
 Figure above shows SHAP values. There are some interesting findings which are intuitive:
@@ -113,23 +116,32 @@ Figure above shows SHAP values. There are some interesting findings which are in
 * Clients who canceled some reservations in  the past are more likely to cancel another reservation.
 * People who buy refundable option cancel reservations more often than others.
 * A lot of days between reservation time and arrival time increases probability of cancelling booking. 
-* People who travel with children are more likely to cancel booking.
+* TEgo nie: People who travel with children are more likely to cancel booking.
+* Trip personalization (parking spaces, special requesrts) makes prediction of cancellation be lower.
+* The longer trip, the higher probability of cancellation. 
 
 There are also less intuitive findings:
 
 * People without any special requests cancel reservetion more often than others.
 * If trip starts at the end of the week there is higher probability that customers change their minds.
-* The bigger number of adults, the highest probability of cancellation.
+* The bigger number of adults, the higher probability of cancellation.
+* The probability od cancellation is lower if it is hotel in the city instead of resort hotel.
 
 #### Instance level
 
 1. The lowest prediction of cancellation probability
-![image](images/03_shap_min.png)
-![image](images/03_min_break_down.png)
+![image](images/03-shap_min.png)
+![image](images/03-breakdown_min.png)
+
+The prediction of probability of cancellation equals 0. The plot of shap values shows that client has booked 1 visit and has not canceled it. The values of features `previous_cancelations`=0 and `previous_booking_not_canceled`=1  make the probability of cancel be lower
+
 2. The highest prediction of cancellation probability
-![image](images/03_shap_max.png)
-![image](images/03_max_break_down.png)
-   
+![image](images/03-shap_max.png)
+![image](images/03-breakdown_max.png)
+
+The prediction of probability of cancellation equals 1. In the past client canceled one reservation so it is more likely to cancel another one. 440 days between reservation and arrival date makes the probability of resignation be higher. It is intuitive, because the client could change plans.   
+
+
 ### Model 2. Repeated guests
 
 
