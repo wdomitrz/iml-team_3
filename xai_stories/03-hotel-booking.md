@@ -7,9 +7,9 @@
 ## Introduction
 
 The dataset is downloaded from the Kaggle competition website <https://www.kaggle.com/jessemostipak/hotel-booking-demand>.
-This dataset contains booking information for a city hotel and a resort hotel in Portugal, and includes information such as when the booking was made, length of stay, the number of adults, children, babies, the number of available parking spaces, chosen meals, price etc. There are 119 390 observations and 32 features. Below you can find features which were used in modelling. Furthermore, feature *arrival_weekday* was added.
+This dataset contains booking information for a city hotel and a resort hotel in Portugal, and includes information such as when the booking was made, length of stay, the number of adults, children, babies, the number of available parking spaces, chosen meals, price etc. There are 119 390 observations and 32 features. Below you can find features which were used in modelling. Furthermore, feature `arrival_weekday` was added.
 
-| | Feature  | Description  |
+|  | Feature | Description |
 |---|---|---|
 | 1 | `hotel` | Resort hotel or city hotel |
 | 2 | `is_canceled` | Value indicating if the booking was canceled (1) or not (0) |
@@ -64,7 +64,7 @@ knitr::include_graphics("images/03-balance.png")
 
 The aim of this model is to predict whether guest cancels reservation and explanation of the reasons. The chosen model is XGBoost. Table below details the split of dataset.
 
-|   | Train  | Test  |
+| | Train | Test |
 |---|---|---|
 |**Number of observations** | 89542 | 29848 |
 |**Number of events** | 33137 (37%)| 11087 (37%)|
