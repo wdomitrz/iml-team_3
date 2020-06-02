@@ -45,7 +45,9 @@ The booking website has information about these reservation characteristics and 
 In this project, we have decided to focus on two first issues.
 
 ## Booking Cancellation
-[//]: (TODO) The main goal of this chapter is to build two models and use some explanation methods to analyze their behaviours.
+
+[//]: # (TODO - chapter description) The main goal of this chapter is to build two models and use some explanation methods to analyze their behaviours.
+
 ### Booking Cancellation: Model
 
 The aim of this model is to predict whether guest cancels reservation and explanation of the reasons. The chosen model is XGBoost. Table below details the split of dataset.
@@ -131,24 +133,33 @@ There are also less intuitive findings:
 
 ### Booking Cancellation: Explanations, instance level
 
-1. The lowest prediction of cancellation probability
+* The lowest prediction of cancellation probability
+
+[//]: # (TODO - R image include)
 ![image](images/03-shap_min.png)
+[//]: # (TODO - R image include)
 ![image](images/03-breakdown_min.png)
 
 The prediction of probability of cancellation equals 0. The plot of **SHAP values** shows that client has booked `1` visit and has not canceled it. The values of features `previous_cancelations` and `previous_booking_not_canceled` (`0` and `1` respectively) make the probability of cancel be lower.
 
-1. The highest prediction of cancellation probability
+* The highest prediction of cancellation probability
+
+[//]: # (TODO - R image include)
 ![image](images/03-shap_max.png)
+[//]: # (TODO - R image include)
 ![image](images/03-breakdown_max.png)
 
 The prediction of probability of cancellation equals *1*. In the past client canceled one reservation so it is more likely to cancel another one. `440` days between reservation and arrival date makes the probability of resignation be higher. It is intuitive, because the client could have changed plans. Price per night reduces prediction. The value of `75` € per night is cheap compared to the prices in the dataset. We can guess that due to the low price, it may not be important for customers to cancel booking and wait for a refund.
 
 ## Repeated guests
 
+[//]: # (TODO - better plot descriptions)
+
 ### Repeated guests: Imbalanced dataset
 
 The distribution of the answer for the second problem is noticeably imbalanced (the ratio between number of observations with given answer is around 3%).  We tested various methods, which are implemented in [imbalanced-learn](https://imbalanced-learn.readthedocs.io/en/stable/index.html) library, in different settings and found the `RandomUnderSampler` effective and sufficient for our needs as a data balancer for our main model in the second problem and `RandomOverSampler` as best balancer to use with simple `SGDClassifier`.
 
+[//]: # (TODO - ratio)
 The figure below presents the distribution of `is_repeated_guest` in the dataset.
 
 ```{r balance, echo=FALSE, fig.cap='is_repeated_guest distribution', out.width = '50%', fig.align='center'}
@@ -161,12 +172,12 @@ This model is meant to predict if the given guest is a repeating guest or not. F
 
 When explaining various instances with the **LIME** explainer for one of the first models we noticed that the model highly relies on `previous_bookings_not_canceled` and `previous_cancellations` parameters. We decided to train a model without using those two variables to let the model focus on the other variables. The best models trained without `previous_bookings_not_canceled` variable had noticeably worse *AUC* score of **0.9** in comparison to **0.967** *AUC* achieved by our best models. Because of high influence on the model we decided to keep both variables.
 
-[//]: # (TODO)
+[//]: # (TODO - change "the first model")
 ```{r ex_lime_2_1, echo=FALSE, fig.cap='LIME explanation for the first model.', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-lime_2_1.png")
 ```
 
-[//]: # (TODO)
+[//]: # (TODO - as above)
 **LIME** explanation for the first model.
 
 As a result of the hyper parameter search we have found the optimal set of hyper parameters including:
@@ -175,7 +186,7 @@ As a result of the hyper parameter search we have found the optimal set of hyper
 * `n_esimators` - the number of trees (`100`),
 * `learning_rate` - boosting learning rate (`0.33`).
 
-[//]: # (TODO)
+[//]: # (TODO - Add the plot)
 The model achieved *AUC* , and the figure above presents its *ROC curve*.
 
 We also trained two simpler models - *SGDClassifier* and *DecisionTreeClassifier*. While the *SGDClassifier* (which had the best performance with increased `max_iter` parameter and when using *RandomOverSampler* balancer) had significantly worse results than the *XGBClassifier*, the *DecisionTreeClassifier* achieved AUC score of **0.94** with the `depth` bounded by `4`. We will focus on the *XGBClassifier* later, but for the sake of explanation we present the `DecisionTreeClassifier` tree here.
