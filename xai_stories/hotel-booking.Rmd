@@ -50,15 +50,15 @@ The distribution of the answer for the second problem is noticeably imbalanced (
 
 The figure below presents the distribution of `is_repeated_guest` in the dataset.
 
-![image](images/03-balance.png)
+<!-- ![image](images/03-balance.png) -->
 
-<!---
-```{r balance, echo=FALSE, fig.cap='is_repeated_guest distribution', out.width = '50%', fig.align='center'}
+```{r balance, echo=FALSE, fig.cap='is_repeated_guest distribution', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-balance.png")
 ```
--->
 
 ## Model
+
+The main goal of this chapter is to build two models and use some explanation methods to analyze their behaviours.
 
 ### Model 1. Booking cancellation
 
@@ -69,7 +69,7 @@ The aim of this model is to predict whether guest cancels reservation and explan
 |**Number of observations** | 89542 | 29848 |
 |**Number of events** | 33137 (37%)| 11087 (37%)|
 
-Bayesian optimisation with TPE tuner has been applied in order to improve model performance. Neural Network Intelligence (NNI) package has been chosen for this task, because it provides user-friendly GUI with summary of experiments.
+Bayesian optimisation with TPE tuner (<https://nni.readthedocs.io/en/latest/Tuner/HyperoptTuner.html>) has been applied in order to improve model performance. Neural Network Intelligence (NNI) package has been chosen for this task, because it provides user-friendly GUI with summary of experiments.
 
 List of optimized hyperparameters and chosen values:
 
@@ -80,123 +80,70 @@ List of optimized hyperparameters and chosen values:
 
 Figure  \@ref(fig:roc-curve)  below shows ROC curve of chosen model. The essential advantages of the model are high AUC and the lack of overfiting.
 
-![image](images/03-roc_curve.png)
+<!--![image](images/03-roc_curve.png)-->
 
-<!---
-```{r roc-curve, echo=FALSE, fig.cap='XGBoost: ROC curve.', out.width = '50%', fig.align='center'}
+```{r roc-curve, echo=FALSE, fig.cap='XGBoost: ROC curve.', out.width = '80%', fig.align='center'}
 knitr::include_graphics("images/03-roc_curve.png")
 ```
--->
 
 In order to compare blackbox model with an interpretable model decision tree classifier was trained. It turned out that splits were made by features which are also important in blackbox model (xgboost). More details on this are given below.
 
-![image](images/03-roc_tree.png)
-<!---
-```{r roc_curve_tree, echo=FALSE, fig.cap='Decision Tree: ROC curve.', out.width = '50%', fig.align='center'}
+<!--![image](images/03-roc_tree.png)-->
+
+```{r roc_curve_tree, echo=FALSE, fig.cap='Decision Tree: ROC curve.', out.width = '80%', fig.align='center'}
 knitr::include_graphics("images/03-roc_tree.png")
 ```
--->
 
-![image](images/03-decision_tree.png)
+<!--![image](images/03-decision_tree.png)-->
 
-<!---
-```{r decision_tree, echo=FALSE, fig.cap='White box model of booking cancellation: decision tree.', out.width = '50%', fig.align='center'}
+```{r decision_tree, echo=FALSE, fig.cap='White box model of booking cancellation: decision tree.', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-decision_tree.png")
 ```
--->
 
 Let's take one observation and analyze prediction of two models. We have chosen observation number 187. Both models predicts high probability of booking cancellation (Decision Tree:0.9940, Xgboost: 0.9982).
 
-![image](images/03-obs.png)
+<!--![image](images/03-obs.png)-->
 
-<!---
-```{r obs, echo=FALSE, fig.cap='The vector of feature values of chosen instance.', out.width = '50%', fig.align='center'}
+```{r obs, echo=FALSE, fig.cap='The vector of feature values of chosen instance.', out.width = '70%', fig.align='center'}
 knitr::include_graphics("images/03-obs.png")
 ```
--->
 
-![image](images/03-ex1.png)
-<!---
-```{r ex_breakdown, echo=FALSE, fig.cap='Break down plot explaining prediciton of chosen instance.', out.width = '50%', fig.align='center'}
+<!--![image](images/03-ex1.png)-->
+```{r ex_breakdown, echo=FALSE, fig.cap='Break down plot explaining prediciton of chosen instance.', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-ex1.png")
 ```
--->
 
-![image](images/03-ex_lime.png)
-<!---
-```{r ex_lime, echo=FALSE, fig.cap='LIME plot explaining prediciton of chosen instance.', out.width = '50%', fig.align='center'}
+<!--![image](images/03-ex_lime.png)-->
+```{r ex_lime, echo=FALSE, fig.cap='LIME plot explaining prediciton of chosen instance.', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-ex_lime.png")
 ```
--->
 
 We can see that explaination of XGBoost model says that features chosen in decision tree have also influence on prediction in XGBoost model. As shown illustrated in Figure \@ref(fig:ex_cp) if chosen client had not canceled reservation in the past, he/she would be less likely to cancel this reservation. What is more, if the client had booked hotel later, he/she would have known his plans better and it would decrease probability of cancellation. Maybe the client canceled booking because of big family event, accident or breaking up with partner (booking for 2 adults). It is impossible to predict those events in advance.
 
-![image](images/03-ex_ceteris_paribus.png)
+<!--![image](images/03-ex_ceteris_paribus.png)-->
 
-<!---
-```{r ex_cp, echo=FALSE, fig.cap='Ceteris Paribus plot explaining prediciton of chosen instance.', out.width = '50%', fig.align='center'}
+```{r ex_cp, echo=FALSE, fig.cap='Ceteris Paribus plot explaining prediciton of chosen instance.', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-ex_ceteris_paribus.png")
 ```
--->
 
 What is the lesson from this example? The performance of Decision Tree is worse than XGBoost, so if the explanation of blackbox model is intuitive it is better to use model with higher AUC.
 
-### Model 2. Repeated guests
 
-This model is meant to predict if the given guest is a repeating guest or not. For this purpose as our main model we chose the `XGBClassifier` from `xgboost` package. As mentioned [above](#imbalanced-dataset) we have used `RandomUnderSampler` to balance the training dataset.
+#### Explanation: dataset level
 
-When explaining various instances with the LIME explainer for one of the first models we noticed that the model highly relies on `previous_bookings_not_canceled` and `previous_cancellations` parameters. We decided to train a model without using those two variables to let the model focus on the other variables. The best models trained without `previous_bookings_not_canceled` variable had noticeably worse AUC score of 0.9 in comparison to 0.967 AUC achieved by our best models. Because of big influence on the model we decided to keep both variables.
+<!---![image](images/03-permutation_fe.png)-->
 
-![image](images/03-lime_2_1.png)
 
-<!---
-```{r ex_lime_2_1, echo=FALSE, fig.cap='LIME explanation for the first model.', out.width = '50%', fig.align='center'}
-knitr::include_graphics("images/03-lime_2_1.png")
+```{r feat_imp, echo=FALSE, fig.cap='Feature importance of XGBoost model.', out.width = '100%', fig.align='center'}
+knitr::include_graphics("images/03-permutation_fe.png")
 ```
--->
-
-LIME explanation for the first model.
-
-As a result of the hyper parameter search we have found the optimal set of hyper parameters including:
-
-* `max_depth` = 6,
-* `learning_rate` = 0.33,
-* `n_estimators` = 100,
-
-The model achieved AUC , and the figure above presents its ROC curve.
-
-We also trained two simpler models - `SGDClassifier` and `DecisionTreeClassifier`. While the `SGDClassifier` (which had the best performance with increased `max_iter` parameter and when using `RandomOverSampler` balancer) had significantly worse results than the `XGBClassifier`, the `DecisionTreeClassifier` achieved AUC score of 0.94 with the depth bounded by 4. We will focus on the `SGDClassifier` later, but for the sake of explanation we present the `DecisionTreeClassifier` tree here.
-
-![image](images/03-tree_2.png)
-
-<!---
-```{r ex_lime_2_1, echo=FALSE, fig.cap='Plot of DecisionTreeClassifier model', out.width = '50%', fig.align='center'}
-knitr::include_graphics("images/03-tree_2.png")
-```
--->
-
-## Explanations
-
-### Model 1. Booking cancellation
-
-#### Dataset level
-
-![image](images/03-feature_importance.png)
-
-<!---
-```{r feat_imp, echo=FALSE, fig.cap='Feature importance of XGBoost model.', out.width = '50%', fig.align='center'}
-knitr::include_graphics("images/03-feature_importance.png")
-```
--->
 
 Figure \@ref(fig:feat_imp) presents feature importance. The list of five most important features contains `deposit_type` and `previous_cancellations`. Intuition suggests that these are important variables in such a problem. There are also variables `required_car_parking_spaces`, `total_of_special_requests`, `market_segment` that will be analyzed later.
 
-![image](images/03-shap_summary_plot.png)
-<!---
-```{r shap_summary_plot, echo=FALSE, fig.cap='Summary of SHAP values of XGBoost model.', out.width = '50%', fig.align='center'}
+<!--![image](images/03-shap_summary_plot.png)-->
+```{r shap_summary_plot, echo=FALSE, fig.cap='Summary of SHAP values of XGBoost model.', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-shap_summary_plot.png")
 ```
--->
 
 Figure above shows SHAP values. There are some interesting findings which are intuitive:
 
@@ -213,7 +160,7 @@ There are also less intuitive findings:
 * The higher number of adults, the higher probability of cancellation.
 * The probability of cancellation is lower if it is hotel in the city instead of resort hotel.
 
-#### Instance level
+#### Explanations: instance level
 
 1. The lowest prediction of cancellation probability
 ![image](images/03-shap_min.png)
@@ -227,43 +174,66 @@ The prediction of probability of cancellation equals 0. The plot of SHAP values 
 
 The prediction of probability of cancellation equals 1. In the past client canceled one reservation so it is more likely to cancel another one. 440 days between reservation and arrival date makes the probability of resignation be higher. It is intuitive, because the client could have changed plans. Price per night reduces prediction. The value of 75 euro per night is cheap compared to the prices in the dataset. We can guess that due to the low price,  it may not be important for customers to cancel booking and wait for a refund.
 
+
+
 ### Model 2. Repeated guests
 
-Here, show how XAI techniques can be used to solve the problem.
-Will dataset specific or instance specific techniques help more?
+This model is meant to predict if the given guest is a repeating guest or not. For this purpose as our main model we chose the `XGBClassifier` from `xgboost` package. As mentioned [above](#imbalanced-dataset) we have used `RandomUnderSampler` to balance the training dataset.
 
-Will XAI be useful before (pre), during (in) or after (post) modeling?
+When explaining various instances with the LIME explainer for one of the first models we noticed that the model highly relies on `previous_bookings_not_canceled` and `previous_cancellations` parameters. We decided to train a model without using those two variables to let the model focus on the other variables. The best models trained without `previous_bookings_not_canceled` variable had noticeably worse AUC score of 0.9 in comparison to 0.967 AUC achieved by our best models. Because of big influence on the model we decided to keep both variables.
 
-What is interesting to learn from the XAI analysis?
+<!--![image](images/03-lime_2_1.png)-->
+
+```{r ex_lime_2_1, echo=FALSE, fig.cap='LIME explanation for the first model.', out.width = '100%', fig.align='center'}
+knitr::include_graphics("images/03-lime_2_1.png")
+```
+
+LIME explanation for the first model.
+
+As a result of the hyper parameter search we have found the optimal set of hyper parameters including:
+
+* `max_depth` = 6,
+* `learning_rate` = 0.33,
+* `n_estimators` = 100,
+
+The model achieved AUC , and the figure above presents its ROC curve.
+
+We also trained two simpler models - `SGDClassifier` and `DecisionTreeClassifier`. While the `SGDClassifier` (which had the best performance with increased `max_iter` parameter and when using `RandomOverSampler` balancer) had significantly worse results than the `XGBClassifier`, the `DecisionTreeClassifier` achieved AUC score of 0.94 with the depth bounded by 4. We will focus on the `SGDClassifier` later, but for the sake of explanation we present the `DecisionTreeClassifier` tree here.
+
+<!--![image](images/03-tree_2.png)-->
+
+```{r ex_lime_2_2, echo=FALSE, fig.cap='Plot of DecisionTreeClassifier model', out.width = '100%', fig.align='center'}
+knitr::include_graphics("images/03-tree_2.png")
+```
+
+## Explanations
+
+
+### Model 2. Repeated guests
+
 
 #### Instance level explanations
 
 We first inspected the Shapley values for two interesting instances with different correct answer. The first instance showed us that the model learned that guests coming to the hotel in October are less likely to come back and that the lack of booking changes also affects repeating negatively. This explanations are reasonable, because in contrast to the holiday guests, the non-vacation time guests probably are visiting the hotel because of some other, independent reason, that is not as repeatable as the annual vacations. The similar reasoning can be repeated for the changes in the booking and number of special requests - when one comes to some place to relax, they will probably care more about additional attractions provided by the hotel and people who visit a relaxing place, when it met their expecations, probably will come again. The second guest, that is an adult coming to the hotel regularly (`previous_booking_not_canceled`) for a weekend (`arrival_weekday` and `stays_in_week_nights`) probably will come again for one more weekend, for the same reasons as they came before.
 
-![image](images/03-shap_2_1.png)
-<!---
-```{r shap_2_1, echo=FALSE, fig.cap='Shapley values for non-repeating customer' out.width = '50%', fig.align='center'}
+<!--![image](images/03-shap_2_1.png)-->
+```{r shap_2_1, echo=FALSE, fig.cap='Shapley values for non-repeating customer', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-shap_2_1.png")
 ```
--->
 
-![image](images/03-shap_2_2.png)
-<!---
-```{r shap_2_2, echo=FALSE, fig.cap='Shapley values for a repeating customer', out.width = '50%', fig.align='center'}
+<!--![image](images/03-shap_2_2.png)-->
+```{r shap_2_2, echo=FALSE, fig.cap='Shapley values for a repeating customer', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-shap_2_1.png")
 ```
--->
 
 ##### Ceteris Paribus plot the same repeating guest
 
 From the Ceteris Paribus plot of `lead_time` variables for the same repeating guest as before we might get even more insight of the model's reasoning. It clearly shows that the reservation made a year before the visit is an indicator that the guest will more likely come back. It might be a thing that this particular guest has some independent reason to visit the hotel regularly and they knows about it in advance, so because that reason probably is repeating, than they will probably visit the hotel once more.
 
-![image](images/03-cp_2_2.png)
-<!---
-```{r cp_2_2, echo=FALSE, fig.cap='Ceteris Paribus plot of lead_time for a repeating customer', out.width = '50%', fig.align='center'}
+<!--![image](images/03-cp_2_2.png)-->
+```{r cp_2_2, echo=FALSE, fig.cap='Ceteris Paribus plot of lead_time for a repeating customer', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-cp_2_2.png")
 ```
--->
 
 The nonlinearity of the Ceteris Paribus profile of `lead_time` might be a clue why we were not able to achieve better results with a simple linear model. This result along with more similar ones may lead to effective feature engendering when focusing on creating less complex models.
 
@@ -271,12 +241,10 @@ The nonlinearity of the Ceteris Paribus profile of `lead_time` might be a clue w
 
 The attempt to understand how important are particular variables for the trained model on the dataset level by calculating Permutational Variable Imporatance gave us a clear insight that the `previous_booking_not_canceled` variable is clearly the most important one, which is very reasonable, because the guest that have visited the hotel before will probably do it once more, in the future.
 
-![image](images/03-pvi_2.png)
-<!---
-```{r pci_2, echo=FALSE, fig.cap='Permutational variable importance od most important variables for XBBClassifier', out.width = '50%', fig.align='center'}
+<!--![image](images/03-pvi_2.png)-->
+```{r pci_2, echo=FALSE, fig.cap='Permutational variable importance od most important variables for XBBClassifier', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-pvi_2.png")
 ```
--->
 
 ## Summary and conclusions
 
@@ -285,3 +253,4 @@ Using XAI methods to examine trained models were useful to understand how the tr
 Moreover, even when explaining the complicated models we can get explanations that are easier to read and interpret than easier models, like a single decision tree.
 
 Last, but not least, when examining the models we were able to find a dependencies, that might be a partial reason for lower performance of other very simple, but easy to understand, linear model.
+
