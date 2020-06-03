@@ -46,11 +46,11 @@ In this project, we have decided to focus on two first issues.
 
 ## Booking Cancellation
 
-[//]: # (TODO - chapter description) The main goal of this chapter is to build two models and use some explanation methods to analyze their behaviours.
+The main aim of this chapter is to build model which predicts whether guest cancels reservation and use some explanation methods to analyze the reasons of customer behavior. 
 
 ### Booking Cancellation: Model
 
-The aim of this model is to predict whether guest cancels reservation and explanation of the reasons. The chosen model is XGBoost. Table below details the split of dataset.
+In order to predict probability of booking cancellation XGBoost model have been fitted. Table below details the split of dataset.
 
 | | Train | Test |
 |---|---|---|
@@ -135,19 +135,20 @@ There are also less intuitive findings:
 
 * The lowest prediction of cancellation probability
 
-[//]: # (TODO - R image include)
-![image](images/03-shap_min.png)
-[//]: # (TODO - R image include)
-![image](images/03-breakdown_min.png)
+```{r feat_imp, echo=FALSE, fig.cap='SHAP values and break down plot of XGBoost model for instance with the lowest probability of booking cancellation.', out.width = '100%', fig.align='center'}
+knitr::include_graphics("images/03-shap_min.png.png")
+knitr::include_graphics("images/03-breakdown_min.png")
+```
 
 The prediction of probability of cancellation equals 0. The plot of **SHAP values** shows that client has booked `1` visit and has not canceled it. The values of features `previous_cancelations` and `previous_booking_not_canceled` (`0` and `1` respectively) make the probability of cancel be lower.
 
 * The highest prediction of cancellation probability
 
-[//]: # (TODO - R image include)
-![image](images/03-shap_max.png)
-[//]: # (TODO - R image include)
-![image](images/03-breakdown_max.png)
+
+```{r feat_imp, echo=FALSE, fig.cap='SHAP values and break down plot of XGBoost model for instance with the highest probability of booking cancellation.', out.width = '100%', fig.align='center'}
+knitr::include_graphics("images/03-shap_max.png.png")
+knitr::include_graphics("images/03-breakdown_max.png")
+```
 
 The prediction of probability of cancellation equals *1*. In the past client canceled one reservation so it is more likely to cancel another one. `440` days between reservation and arrival date makes the probability of resignation be higher. It is intuitive, because the client could have changed plans. Price per night reduces prediction. The value of `75` € per night is cheap compared to the prices in the dataset. We can guess that due to the low price, it may not be important for customers to cancel booking and wait for a refund.
 
