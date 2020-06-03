@@ -153,16 +153,15 @@ The prediction of probability of cancellation equals *1*. In the past client can
 
 ## Repeated guests
 
-[//]: # (TODO - better plot descriptions)
+The main goal of models and explanations in this section is to effectively predict whether the guest will come to the hotel once more, and better understand the factors affecting it.
 
 ### Repeated guests: Imbalanced dataset
 
 The distribution of the answer for the second problem is noticeably imbalanced (the ratio between number of observations with given answer is around 3%).  We tested various methods, which are implemented in [imbalanced-learn](https://imbalanced-learn.readthedocs.io/en/stable/index.html) library, in different settings and found the `RandomUnderSampler` effective and sufficient for our needs as a data balancer for our main model in the second problem and `RandomOverSampler` as best balancer to use with simple `SGDClassifier`.
 
-[//]: # (TODO - ratio)
-The figure below presents the distribution of `is_repeated_guest` in the dataset.
+The figure below presents the distribution of `is_repeated_guest` in the dataset. The ratio of this distribution is approximately **30 : 1**.
 
-```{r balance, echo=FALSE, fig.cap='is_repeated_guest distribution', out.width = '50%', fig.align='center'}
+```{r balance, echo=FALSE, fig.cap='The distribution of guests that are and are not repeated guest in the dataset', out.width = '50%', fig.align='center'}
 knitr::include_graphics("images/03-balance.png")
 ```
 
@@ -170,15 +169,11 @@ knitr::include_graphics("images/03-balance.png")
 
 This model is meant to predict if the given guest is a repeating guest or not. For this purpose as our main model we chose the *XGBClassifier* from `xgboost` package. As mentioned [above](#imbalanced-dataset) we have used *RandomUnderSampler* to balance the training dataset.
 
-When explaining various instances with the **LIME** explainer for one of the first models we noticed that the model highly relies on `previous_bookings_not_canceled` and `previous_cancellations` parameters. We decided to train a model without using those two variables to let the model focus on the other variables. The best models trained without `previous_bookings_not_canceled` variable had noticeably worse *AUC* score of **0.9** in comparison to **0.967** *AUC* achieved by our best models. Because of high influence on the model we decided to keep both variables.
+When explaining various instances with the **LIME** explainer (the figure below presents the **LIME** explanation for the best of our first models) for one of the first models we noticed that the model highly relies on `previous_bookings_not_canceled` and `previous_cancellations` parameters. We decided to train a model without using those two variables to let the model focus on the other variables. The best models trained without `previous_bookings_not_canceled` variable had noticeably worse *AUC* score of **0.9** in comparison to **0.967** *AUC* achieved by our best models. Because of high influence on the model we decided to keep both variables.
 
-[//]: # (TODO - change "the first model")
-```{r ex_lime_2_1, echo=FALSE, fig.cap='LIME explanation for the first model.', out.width = '100%', fig.align='center'}
+```{r ex_lime_2_1, echo=FALSE, fig.cap='LIME explanation for the best of the first models', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-lime_2_1.png")
 ```
-
-[//]: # (TODO - as above)
-**LIME** explanation for the first model.
 
 As a result of the hyper parameter search we have found the optimal set of hyper parameters including:
 
@@ -186,12 +181,15 @@ As a result of the hyper parameter search we have found the optimal set of hyper
 * `n_esimators` - the number of trees (`100`),
 * `learning_rate` - boosting learning rate (`0.33`).
 
-[//]: # (TODO - Add the plot)
-The model achieved *AUC* , and the figure above presents its *ROC curve*.
+```{r roc_2, echo=FALSE, fig.cap='ROC curve for the XGBClassifier', out.width = '100%', fig.align='center'}
+knitr::include_graphics("images/03-roc_2.png")
+```
+
+The model achieved **0.967** *AUC*, and the figure above presents its *ROC curve*.
 
 We also trained two simpler models - *SGDClassifier* and *DecisionTreeClassifier*. While the *SGDClassifier* (which had the best performance with increased `max_iter` parameter and when using *RandomOverSampler* balancer) had significantly worse results than the *XGBClassifier*, the *DecisionTreeClassifier* achieved AUC score of **0.94** with the `depth` bounded by `4`. We will focus on the *XGBClassifier* later, but for the sake of explanation we present the `DecisionTreeClassifier` tree here.
 
-```{r ex_lime_2_2, echo=FALSE, fig.cap='Plot of DecisionTreeClassifier model', out.width = '100%', fig.align='center'}
+```{r tree_2, echo=FALSE, fig.cap='Plot of the tree of the DecisionTreeClassifier model', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-tree_2.png")
 ```
 
@@ -201,7 +199,7 @@ Unfortunately one can see that the "explainable by design" *decision tree* model
 
 We first inspected the **SHAP values** for two interesting instances with different correct answer. The first instance showed us that the model learned that guests coming to the hotel in October are less likely to come back and that the lack of booking changes also affects repeating negatively. This explanations are reasonable, because in contrast to the holiday guests, the non-vacation time guests probably are visiting the hotel because of some other, independent reason, that is not as repeatable as the annual vacations. The similar reasoning can be repeated for the changes in the booking and number of special requests - when one comes to some place to relax, they will probably care more about additional attractions provided by the hotel and people who visit a relaxing place, when it met their expectations, probably will come again. The second guest, that is an adult coming to the hotel regularly (`previous_booking_not_canceled`) for a weekend (`arrival_weekday` and `stays_in_week_nights`) probably will come again for one more weekend, for the same reasons as they came before.
 
-```{r shap_2_1, echo=FALSE, fig.cap='Shapley values for non-repeating customer', out.width = '100%', fig.align='center'}
+```{r shap_2_1, echo=FALSE, fig.cap='Shapley values for a non-repeating customer', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-shap_2_1.png")
 ```
 
@@ -223,7 +221,7 @@ The nonlinearity of the **Ceteris Paribus** profile of `lead_time` might be a cl
 
 The attempt to understand how important are particular variables for the trained model on the dataset level by calculating **Permutational Variable Imporatance** gave us a clear insight that the `previous_booking_not_canceled` variable is clearly the most important one, which is very reasonable, because the guest that have visited the hotel before will probably do it once more, in the future.
 
-```{r pci_2, echo=FALSE, fig.cap='Permutational variable importance of most important variables for XBBClassifier', out.width = '100%', fig.align='center'}
+```{r pci_2, echo=FALSE, fig.cap='Permutational variable importance of most important variables for XGBClassifier', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-pvi_2.png")
 ```
 
