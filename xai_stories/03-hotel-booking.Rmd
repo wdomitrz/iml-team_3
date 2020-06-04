@@ -50,7 +50,7 @@ The main aim of this chapter is to build model which predicts whether guest canc
 
 ### Booking Cancellation: Model
 
-In order to predict probability of booking cancellation XGBoost model have been fitted. Table below details the split of dataset.
+In order to predict probability of booking cancellation XGBoost model has been fitted. Table below details the split of dataset.
 
 | | Train | Test |
 |---|---|---|
@@ -82,11 +82,26 @@ knitr::include_graphics("images/03-roc_tree.png")
 knitr::include_graphics("images/03-decision_tree.png")
 ```
 
-Let's take one observation and analyze prediction of two models. We have chosen observation number `187`. Both models predicts high probability of booking cancellation (*Decision Tree*: **0.9940**, *Xgboost*: **0.9982**). We will comment on the readability of the *decision tree* explanation by plotting the tree later.
+Let's take one observation and analyze prediction of two models. We have chosen observation number `187` with features values shown in the table below. Both models predicts high probability of booking cancellation (*Decision Tree*: **0.9940**, *Xgboost*: **0.9982**). We will comment on the readability of the *decision tree* explanation by plotting the tree later.
 
-```{r obs, echo=FALSE, fig.cap='The vector of feature values of chosen instance.', out.width = '70%', fig.align='center'}
-knitr::include_graphics("images/03-obs.png")
-```
+
+| Feature | Value | Feature | Value |
+|---|---|---|---|
+| hotel | 0 | arrival_date_month | 9 |
+| lead_time | 321 | arrival_date_week_number | 36|
+| arrival_date_day_of_month | 3 | stays_in_weekend_nights | 0|
+| adults | 2 | children | 0 |
+| babies | 0 | meal | 0 |
+| market_segment | 4 | distribution_chanel | 3 |
+| is_repeated_guest | 1 | previous_cancellations | 1 | 
+| previous_booking_not_canceled | 0 | booking_changes | 0 |
+| deposit_type | 0 | days_in_waiting_list | 0 |
+| customer_type | 3 | adr | 62.8 |
+| required_car_parking_spaces | 0 | total_of_special_requests | 0 |
+| arrival_weekday | 2 | | |  
+
+
+
 
 ```{r ex_breakdown, echo=FALSE, fig.cap='Break down plot explaining prediciton of chosen instance.', out.width = '100%', fig.align='center'}
 knitr::include_graphics("images/03-ex1.png")
