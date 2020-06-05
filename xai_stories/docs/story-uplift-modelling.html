@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Story Uplift Modelling: eXplaining colon cancer survival rate after treatment | XAI Stories</title>
+  <meta name="description" content="Case studies for eXplainable Artificial Intelligence" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Story Uplift Modelling: eXplaining colon cancer survival rate after treatment | XAI Stories" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:description" content="Case studies for eXplainable Artificial Intelligence" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Story Uplift Modelling: eXplaining colon cancer survival rate after treatment | XAI Stories" />
+  
+  <meta name="twitter:description" content="Case studies for eXplainable Artificial Intelligence" />
+  <meta name="twitter:image" content="images/cover.png" />
+
+
+
+<meta name="date" content="2020-06-05" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="story-hotel-booking.html"/>
+<link rel="next" href="story-meps-explainable-predictions-for-healthcare-expenditures.html"/>
+<script src="libs/header-attrs/header-attrs.js"></script>
+<script src="libs/jquery/jquery.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./"><h3>XAI Stories</h3> Case studies</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="" data-path="foreword.html"><a href="foreword.html"><i class="fa fa-check"></i>Foreword</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="foreword.html"><a href="foreword.html#why"><i class="fa fa-check"></i><b>0.1</b> Why?</a></li>
+<li class="chapter" data-level="0.2" data-path="foreword.html"><a href="foreword.html#what"><i class="fa fa-check"></i><b>0.2</b> What?</a></li>
+<li class="chapter" data-level="0.3" data-path="foreword.html"><a href="foreword.html#how"><i class="fa fa-check"></i><b>0.3</b> How?</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="story-compas.html"><a href="story-compas.html"><i class="fa fa-check"></i><b>1</b> Story COMPAS: recidivism reloaded</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="story-compas.html"><a href="story-compas.html#introduction"><i class="fa fa-check"></i><b>1.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="story-compas.html"><a href="story-compas.html#previous-work"><i class="fa fa-check"></i><b>1.1.1</b> Previous work</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="story-compas.html"><a href="story-compas.html#models"><i class="fa fa-check"></i><b>1.2</b> Models</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="story-compas.html"><a href="story-compas.html#recidivism"><i class="fa fa-check"></i><b>1.2.1</b> Recidivism</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="story-compas.html"><a href="story-compas.html#explanations"><i class="fa fa-check"></i><b>1.3</b> Explanations</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="story-compas.html"><a href="story-compas.html#model-specific"><i class="fa fa-check"></i><b>1.3.1</b> Model specific</a></li>
+<li class="chapter" data-level="1.3.2" data-path="story-compas.html"><a href="story-compas.html#instance-specific"><i class="fa fa-check"></i><b>1.3.2</b> Instance specific</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="story-compas.html"><a href="story-compas.html#summary-and-conclusions"><i class="fa fa-check"></i><b>1.4</b> Summary and conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html"><i class="fa fa-check"></i><b>2</b> Story House Sale Prices: eXplainable predictions for house sale</a>
+<ul>
+<li class="chapter" data-level="" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#take-away-messages"><i class="fa fa-check"></i>Take-away messages</a></li>
+<li class="chapter" data-level="2.1" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#introduction-1"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#data"><i class="fa fa-check"></i><b>2.2</b> Data</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#data-preperation"><i class="fa fa-check"></i><b>2.2.1</b> Data preperation</a></li>
+<li class="chapter" data-level="2.2.2" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#external-data"><i class="fa fa-check"></i><b>2.2.2</b> External data</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#model"><i class="fa fa-check"></i><b>2.3</b> Model</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#linear-models"><i class="fa fa-check"></i><b>2.3.1</b> Linear models</a></li>
+<li class="chapter" data-level="2.3.2" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#linear-models-assessment"><i class="fa fa-check"></i><b>2.3.2</b> Linear models assessment</a></li>
+<li class="chapter" data-level="2.3.3" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#machine-learning-models"><i class="fa fa-check"></i><b>2.3.3</b> Machine Learning models</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#explanations-1"><i class="fa fa-check"></i><b>2.4</b> Explanations</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#xai-for-geographical-location"><i class="fa fa-check"></i><b>2.4.1</b> XAI for geographical location</a></li>
+<li class="chapter" data-level="2.4.2" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#feature-importance"><i class="fa fa-check"></i><b>2.4.2</b> Feature importance</a></li>
+<li class="chapter" data-level="2.4.3" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#partial-dependence-plots-pdp"><i class="fa fa-check"></i><b>2.4.3</b> Partial Dependence Plots (PDP)</a></li>
+<li class="chapter" data-level="2.4.4" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#new-possibilities-with-pdp"><i class="fa fa-check"></i><b>2.4.4</b> New possibilities with PDP</a></li>
+<li class="chapter" data-level="2.4.5" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#instance-level-explanations."><i class="fa fa-check"></i><b>2.4.5</b> Instance level explanations.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#use-case-of-the-model"><i class="fa fa-check"></i><b>2.5</b> Use case of the model</a></li>
+<li class="chapter" data-level="2.6" data-path="story-house-sale-prices.html"><a href="story-house-sale-prices.html#summary-and-conclusions-1"><i class="fa fa-check"></i><b>2.6</b> Summary and conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html"><i class="fa fa-check"></i><b>3</b> Story hotel booking: eXplainable predictions of booking cancellation and guests coming back</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html#introduction-2"><i class="fa fa-check"></i><b>3.1</b> Introduction</a></li>
+<li class="chapter" data-level="3.2" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html#booking-cancellation"><i class="fa fa-check"></i><b>3.2</b> Booking Cancellation</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html#booking-cancellation-model"><i class="fa fa-check"></i><b>3.2.1</b> Booking Cancellation: Model</a></li>
+<li class="chapter" data-level="3.2.2" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html#booking-cancellation-explanation-dataset-level"><i class="fa fa-check"></i><b>3.2.2</b> Booking Cancellation: Explanation, dataset level</a></li>
+<li class="chapter" data-level="3.2.3" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html#booking-cancellation-explanations-instance-level"><i class="fa fa-check"></i><b>3.2.3</b> Booking Cancellation: Explanations, instance level</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html#repeated-guests"><i class="fa fa-check"></i><b>3.3</b> Repeated guests</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html#repeated-guests-imbalanced-dataset"><i class="fa fa-check"></i><b>3.3.1</b> Repeated guests: Imbalanced dataset</a></li>
+<li class="chapter" data-level="3.3.2" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html#repeated-guests-model"><i class="fa fa-check"></i><b>3.3.2</b> Repeated guests: Model</a></li>
+<li class="chapter" data-level="3.3.3" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html#repeated-guests-explanations-instance-level"><i class="fa fa-check"></i><b>3.3.3</b> Repeated guests: Explanations, instance level</a></li>
+<li class="chapter" data-level="3.3.4" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html#repeated-guests-explanations-dataset-level"><i class="fa fa-check"></i><b>3.3.4</b> Repeated guests: Explanations, dataset level</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="story-hotel-booking.html"><a href="story-hotel-booking.html#summary-and-conclusions-2"><i class="fa fa-check"></i><b>3.4</b> Summary and conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html"><i class="fa fa-check"></i><b>4</b> Story Uplift Modelling: eXplaining colon cancer survival rate after treatment</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html#introduction-3"><i class="fa fa-check"></i><b>4.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html#what-is-uplift-modelling"><i class="fa fa-check"></i><b>4.1.1</b> What is Uplift Modelling?</a></li>
+<li class="chapter" data-level="4.1.2" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html#dataset-description"><i class="fa fa-check"></i><b>4.1.2</b> Dataset Description</a></li>
+<li class="chapter" data-level="4.1.3" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html#ideas"><i class="fa fa-check"></i><b>4.1.3</b> Ideas</a></li>
+<li class="chapter" data-level="4.1.4" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html#why-is-it-worth-the-hassle"><i class="fa fa-check"></i><b>4.1.4</b> Why is it worth the hassle?</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html#data-preprocessing"><i class="fa fa-check"></i><b>4.2</b> Data Preprocessing</a></li>
+<li class="chapter" data-level="4.3" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html#model-1"><i class="fa fa-check"></i><b>4.3</b> Model</a></li>
+<li class="chapter" data-level="4.4" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html#explanations-2"><i class="fa fa-check"></i><b>4.4</b> Explanations</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html#dataset-level-explainations"><i class="fa fa-check"></i><b>4.4.1</b> Dataset Level Explainations</a></li>
+<li class="chapter" data-level="4.4.2" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html#instance-level-explainations"><i class="fa fa-check"></i><b>4.4.2</b> Instance Level Explainations</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="story-uplift-modelling.html"><a href="story-uplift-modelling.html#summary-and-conclusions-3"><i class="fa fa-check"></i><b>4.5</b> Summary and Conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="story-meps-explainable-predictions-for-healthcare-expenditures.html"><a href="story-meps-explainable-predictions-for-healthcare-expenditures.html"><i class="fa fa-check"></i><b>5</b> Story Meps: eXplainable predictions for healthcare expenditures</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="story-meps-explainable-predictions-for-healthcare-expenditures.html"><a href="story-meps-explainable-predictions-for-healthcare-expenditures.html#introduction-4"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="story-meps-explainable-predictions-for-healthcare-expenditures.html"><a href="story-meps-explainable-predictions-for-healthcare-expenditures.html#model-2"><i class="fa fa-check"></i><b>5.2</b> Model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="story-meps-explainable-predictions-for-healthcare-expenditures.html"><a href="story-meps-explainable-predictions-for-healthcare-expenditures.html#data-1"><i class="fa fa-check"></i><b>5.2.1</b> Data</a></li>
+<li class="chapter" data-level="5.2.2" data-path="story-meps-explainable-predictions-for-healthcare-expenditures.html"><a href="story-meps-explainable-predictions-for-healthcare-expenditures.html#model-3"><i class="fa fa-check"></i><b>5.2.2</b> Model</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="story-meps-explainable-predictions-for-healthcare-expenditures.html"><a href="story-meps-explainable-predictions-for-healthcare-expenditures.html#explanations-3"><i class="fa fa-check"></i><b>5.3</b> Explanations</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="story-meps-explainable-predictions-for-healthcare-expenditures.html"><a href="story-meps-explainable-predictions-for-healthcare-expenditures.html#model-level-explainations"><i class="fa fa-check"></i><b>5.3.1</b> Model Level Explainations</a></li>
+<li class="chapter" data-level="5.3.2" data-path="story-meps-explainable-predictions-for-healthcare-expenditures.html"><a href="story-meps-explainable-predictions-for-healthcare-expenditures.html#instance-level-explainations---business-approach"><i class="fa fa-check"></i><b>5.3.2</b> Instance Level Explainations - business approach</a></li>
+<li class="chapter" data-level="5.3.3" data-path="story-meps-explainable-predictions-for-healthcare-expenditures.html"><a href="story-meps-explainable-predictions-for-healthcare-expenditures.html#instance-level-explainations---instance-specific-approach"><i class="fa fa-check"></i><b>5.3.3</b> Instance Level Explainations - instance specific approach</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="story-meps-explainable-predictions-for-healthcare-expenditures.html"><a href="story-meps-explainable-predictions-for-healthcare-expenditures.html#summary-and-conclusions-4"><i class="fa fa-check"></i><b>5.4</b> Summary and conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html"><i class="fa fa-check"></i><b>6</b> Story MEPS: Healthcare expenditures of individuals</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html#todos"><i class="fa fa-check"></i><b>6.1</b> TODOS</a></li>
+<li class="chapter" data-level="6.2" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html#introduction-5"><i class="fa fa-check"></i><b>6.2</b> Introduction</a></li>
+<li class="chapter" data-level="6.3" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html#models-1"><i class="fa fa-check"></i><b>6.3</b> Models</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html#model-1-linear"><i class="fa fa-check"></i><b>6.3.1</b> Model 1: Linear</a></li>
+<li class="chapter" data-level="6.3.2" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html#model-2-ann"><i class="fa fa-check"></i><b>6.3.2</b> Model 2: ANN</a></li>
+<li class="chapter" data-level="6.3.3" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html#model-3-xgb"><i class="fa fa-check"></i><b>6.3.3</b> Model 3: XGB</a></li>
+<li class="chapter" data-level="6.3.4" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html#results"><i class="fa fa-check"></i><b>6.3.4</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html#explanations-4"><i class="fa fa-check"></i><b>6.4</b> Explanations</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html#instance-level"><i class="fa fa-check"></i><b>6.4.1</b> Instance level</a></li>
+<li class="chapter" data-level="6.4.2" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html#dataset-level"><i class="fa fa-check"></i><b>6.4.2</b> Dataset level</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="story-meps-healthcare-expenditures-of-individuals.html"><a href="story-meps-healthcare-expenditures-of-individuals.html#summary-and-conclusions-5"><i class="fa fa-check"></i><b>6.5</b> Summary and conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="story-lungs.html"><a href="story-lungs.html"><i class="fa fa-check"></i><b>7</b> Story lungs: eXplainable predictions for post operational risks</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="story-lungs.html"><a href="story-lungs.html#introduction-6"><i class="fa fa-check"></i><b>7.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.2" data-path="story-lungs.html"><a href="story-lungs.html#model-4"><i class="fa fa-check"></i><b>7.2</b> Model</a></li>
+<li class="chapter" data-level="7.3" data-path="story-lungs.html"><a href="story-lungs.html#explanations-5"><i class="fa fa-check"></i><b>7.3</b> Explanations</a></li>
+<li class="chapter" data-level="7.4" data-path="story-lungs.html"><a href="story-lungs.html#summary-and-conclusions-6"><i class="fa fa-check"></i><b>7.4</b> Summary and conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="heloc-credits.html"><a href="heloc-credits.html"><i class="fa fa-check"></i><b>8</b> Heloc credits</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="heloc-credits.html"><a href="heloc-credits.html#introduction-7"><i class="fa fa-check"></i><b>8.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.2" data-path="heloc-credits.html"><a href="heloc-credits.html#dataset"><i class="fa fa-check"></i><b>8.2</b> Dataset</a></li>
+<li class="chapter" data-level="8.3" data-path="heloc-credits.html"><a href="heloc-credits.html#model-5"><i class="fa fa-check"></i><b>8.3</b> Model</a></li>
+<li class="chapter" data-level="8.4" data-path="heloc-credits.html"><a href="heloc-credits.html#explanations-6"><i class="fa fa-check"></i><b>8.4</b> Explanations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="heloc-credits.html"><a href="heloc-credits.html#explanation-for-management"><i class="fa fa-check"></i><b>8.4.1</b> Explanation for management</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="heloc-credits.html"><a href="heloc-credits.html#application-for-clients"><i class="fa fa-check"></i><b>8.5</b> Application for clients</a></li>
+<li class="chapter" data-level="8.6" data-path="heloc-credits.html"><a href="heloc-credits.html#summary-and-conclusion"><i class="fa fa-check"></i><b>8.6</b> Summary and conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="story-uplift-marketing1.html"><a href="story-uplift-marketing1.html"><i class="fa fa-check"></i><b>9</b> Story: Uplift modeling - eXplainable predictions for optimized marketing campaigns</a></li>
+<li class="chapter" data-level="10" data-path="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html"><a href="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html"><i class="fa fa-check"></i><b>10</b> Hotel booking cancellation story: eXplainable predictions for booking cancellation</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html"><a href="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html#introduction-9"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
+<li class="chapter" data-level="10.2" data-path="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html"><a href="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html#problem-specification"><i class="fa fa-check"></i><b>10.2</b> Problem specification</a></li>
+<li class="chapter" data-level="10.3" data-path="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html"><a href="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html#target-leak-detection"><i class="fa fa-check"></i><b>10.3</b> Target leak detection</a></li>
+<li class="chapter" data-level="10.4" data-path="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html"><a href="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html#bias-correction"><i class="fa fa-check"></i><b>10.4</b> Bias correction</a></li>
+<li class="chapter" data-level="10.5" data-path="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html"><a href="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html#offering-different-conditions"><i class="fa fa-check"></i><b>10.5</b> Offering different conditions</a></li>
+<li class="chapter" data-level="10.6" data-path="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html"><a href="hotel-booking-cancellation-story-explainable-predictions-for-booking-cancellation.html#conclusions-1"><i class="fa fa-check"></i><b>10.6</b> Conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="examples.html"><a href="examples.html"><i class="fa fa-check"></i>Examples</a></li>
+<li class="chapter" data-level="11" data-path="story-covid19.html"><a href="story-covid19.html"><i class="fa fa-check"></i><b>11</b> Story covid19: eXplainable predictions for mortality</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="story-covid19.html"><a href="story-covid19.html#figures-and-citations"><i class="fa fa-check"></i><b>11.1</b> Figures and citations</a></li>
+<li class="chapter" data-level="11.2" data-path="story-covid19.html"><a href="story-covid19.html#introduction-10"><i class="fa fa-check"></i><b>11.2</b> Introduction</a></li>
+<li class="chapter" data-level="11.3" data-path="story-covid19.html"><a href="story-covid19.html#model-7"><i class="fa fa-check"></i><b>11.3</b> Model</a></li>
+<li class="chapter" data-level="11.4" data-path="story-covid19.html"><a href="story-covid19.html#explanations-8"><i class="fa fa-check"></i><b>11.4</b> Explanations</a></li>
+<li class="chapter" data-level="11.5" data-path="story-covid19.html"><a href="story-covid19.html#summary-and-conclusions-7"><i class="fa fa-check"></i><b>11.5</b> Summary and conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="story-compas-recidivism-reloaded.html"><a href="story-compas-recidivism-reloaded.html"><i class="fa fa-check"></i><b>12</b> Story COMPAS: recidivism reloaded</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="story-compas-recidivism-reloaded.html"><a href="story-compas-recidivism-reloaded.html#introduction-11"><i class="fa fa-check"></i><b>12.1</b> Introduction</a></li>
+<li class="chapter" data-level="12.2" data-path="story-compas-recidivism-reloaded.html"><a href="story-compas-recidivism-reloaded.html#model-8"><i class="fa fa-check"></i><b>12.2</b> Model</a></li>
+<li class="chapter" data-level="12.3" data-path="story-compas-recidivism-reloaded.html"><a href="story-compas-recidivism-reloaded.html#explanations-9"><i class="fa fa-check"></i><b>12.3</b> Explanations</a></li>
+<li class="chapter" data-level="12.4" data-path="story-compas-recidivism-reloaded.html"><a href="story-compas-recidivism-reloaded.html#summary-and-conclusions-8"><i class="fa fa-check"></i><b>12.4</b> Summary and conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="acknowledgements.html"><a href="acknowledgements.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="_blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">XAI Stories</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="story-uplift-modelling" class="section level1" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Story Uplift Modelling: eXplaining colon cancer survival rate after treatment</h1>
+<p><em>Authors: Aleksandra Łuczak (Warsaw University of Technology), Tymoteusz Makowski (Warsaw University of Technology), Kateryna Shulikova (Warsaw School of Economics)</em></p>
+<p><em>Mentors: Miłosz Dobersztyn (McKinsey), Armin Reinert (McKinsey)</em></p>
+<div id="introduction-3" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Introduction</h2>
+<p>We will use data about <strong>Chemotherapy for Stage B/C colon cancer</strong> from <code>survival</code> package in R. The documentation can be found <a href="https://stat.ethz.ch/R-manual/R-devel/library/survival/html/colon.html">here</a>, the package can be installed with <code>install.packages("survival")</code> command in R console. After the installation dataset can be accessed via <code>survival::colon</code> command.</p>
+<!--
+    TODO: Describe why this problem is important. Indicate the most important literature on the problem. 
+    TODO(oryginał): Put a description of the problem here. *Indicate the data source.*
+-->
+<div id="what-is-uplift-modelling" class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> What is Uplift Modelling?</h3>
+<p>For classical algorithms in machine learning it is hard to predict causal impact of the event because they are more suited for predicting the results after an action. In some cases, such as a marketing campaign or medical treatment, that causal impact might be extremely important. Due to the possibility of using two training sets (treatment and control groups) by uplift modeling this problem was solved.</p>
+<p>Uplift modeling is one of the techniques or a branch of machine learning that tries to forecast class probability differences between group exposed to some action or therapy and control group (without that action or therapy).</p>
+<p>This technique also allows to discover in research those groups of patients for which treatment was most beneficial, so it is commonly used not only in marketing campaigns or medical treatments but also in other customer services.</p>
+<p>References:</p>
+<ul>
+<li>Uplift modeling with survival data <span class="citation">(Jaroszewicz and Rzepakowski <a href="#ref-04_jaroszewicz_uplift" role="doc-biblioref">2014</a>)</span>,</li>
+<li>Uplift modeling for clinical trial data <span class="citation">(Jaskowski and Jaroszewicz <a href="#ref-04_jaskowski_uplift" role="doc-biblioref">2012</a>)</span>,</li>
+<li>Uplift Modeling for Multiple Treatments with Cost Optimization <span class="citation">(Zhao and Harinen <a href="#ref-04_zhao_uplift" role="doc-biblioref">2019</a>)</span>,</li>
+<li>Linear regression for uplift modeling <span class="citation">(Krzysztof and Jaroszewicz <a href="#ref-04_jaroszewicz_linear" role="doc-biblioref">2018</a>)</span>,</li>
+<li>Ensemble methods for uplift modeling <span class="citation">(Sołtys, Jaroszewicz, and Rzepakowski <a href="#ref-04_soltys_ensemble" role="doc-biblioref">2015</a>)</span>.</li>
+</ul>
+<!-- TODO:
+ - Czym jest uplift modelling?
+ - Gdzie go się stosuje?
+ - Jakie problemy możemy modelować (survival & leki, marketing & zysk)?
+-->
+</div>
+<div id="dataset-description" class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Dataset Description</h3>
+<p>We use data from one of the first successful trials of adjuvant chemotherapy for colon cancer. There are two type of treatment:</p>
+<ul>
+<li><em>Levamisole</em> is a low-toxicity compound previously used to treat worm infestations in animals and its effects on the treatment of colon cancer have been noted;</li>
+<li><em>5-FluoroUracyl(FU)</em> is a moderately toxic (as these things go) chemotherapy agent. This is the “strongest” one treatment.</li>
+</ul>
+<p>Both of these medications are given after the cancer excision, it’s adjutant chemistry, that means “extra post-operative”.</p>
+<p>There are two records per person, one for recurrence and one for death. Dataset contains 1858 observations and 16 features which are described in the <a href="story-uplift-modelling.html#tab:04-variables-description">4.1</a> table.</p>
+<table class="table">
+<col width="20%">
+<col width="20%">
+<col width="75%">
+<caption>
+<span id="tab:04-variables-description">TABLE 4.1: </span>Description of variables found in the dataset with values types from data exploration.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+id
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+An id.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+study
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+1 for all patients.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+rx
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Treatment: Observation, Levamisole or Levamisole+5-FluoroUracyl.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sex
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Patient’s sex: Male or Female.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age
+</td>
+<td style="text-align:left;">
+continuous
+</td>
+<td style="text-align:left;">
+Patient’s age in years.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+obstruct
+</td>
+<td style="text-align:left;">
+binary
+</td>
+<td style="text-align:left;">
+Stenosis of the colon by the cancer, which is blockage by the tumor.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+perfor
+</td>
+<td style="text-align:left;">
+binary
+</td>
+<td style="text-align:left;">
+Perforation of colon - a flag whether there was a hole in the colon.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+adhere
+</td>
+<td style="text-align:left;">
+binary
+</td>
+<td style="text-align:left;">
+Adherence to the surrounding organs (e.g. bladder).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nodes
+</td>
+<td style="text-align:left;">
+continuous
+</td>
+<td style="text-align:left;">
+Number of lymph nodes with detectable cancer i.e. during the operation the lymph nodes that were attacked by the cancer are cut out. For the operation to be successful there should be at least 12 lymph nodes.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+time
+</td>
+<td style="text-align:left;">
+continuous
+</td>
+<td style="text-align:left;">
+Days until event or censoring. The time of receiving the treatment is considered to be time = 0, the time that passed in the variable time is the time until death or relapse from receiving the treatment.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+status
+</td>
+<td style="text-align:left;">
+binary
+</td>
+<td style="text-align:left;">
+Censoring status.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+differ
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Differentiation of tumour cell (1=well, 2=moderate, 3=poor). The more the better because it is more like colon cells.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+extent
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Extent of local spread, what cells did he reach (1=submucosa, 2=muscle, 3=serosa, 4=contiguous structures). The less the better.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+surg
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Time from surgery to registration (0=short, 1=long).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+node4
+</td>
+<td style="text-align:left;">
+binary
+</td>
+<td style="text-align:left;">
+More than 4 positive lymph nodes.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+etype
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Event type: 1=recurrence, 2=death.
+</td>
+</tr>
+</tbody>
+</table>
+<p>Typically, the survival data includes two variables: the observed survival time (<code>time</code> variable in our dataset) and a binary censoring status variable (<code>status</code> variable in our dataset). The <code>status</code> variable indicates whether the event has been observed (typically denoted by <code>status = 1</code>). However, if the event has not been observed (<code>status = 0</code>) then the true survival time has ben censored, i.e. it is only known that the true survival time is at least equal to <code>time</code> <span class="citation">(Jaroszewicz and Rzepakowski <a href="#ref-04_jaroszewicz_uplift" role="doc-biblioref">2014</a>)</span>.</p>
+</div>
+<div id="ideas" class="section level3" number="4.1.3">
+<h3><span class="header-section-number">4.1.3</span> Ideas</h3>
+<p>There are many ways to use this data:</p>
+<ul>
+<li>prediction of the patient’s life expectancy depending on whether they received treatment or not,</li>
+<li>prediction whether the treatment is effective or not,</li>
+<li>prediction of the life expectancy depending on the medicine administered.</li>
+</ul>
+<p>We have decided to focus on the last mentioned approach. There are two approaches for modelling this approach. One of them being classification whether the patient will live longer than given threshold <span class="citation">(Jaroszewicz and Rzepakowski <a href="#ref-04_jaroszewicz_uplift" role="doc-biblioref">2014</a>)</span> and the second one, on whom we will focus, regression which will yield result by how much the treatment will change the life expectancy.</p>
+</div>
+<div id="why-is-it-worth-the-hassle" class="section level3" number="4.1.4">
+<h3><span class="header-section-number">4.1.4</span> Why is it worth the hassle?</h3>
+<p>When a patient learns about the colon cancer disease they usually ask <em>“How much more time do I have left he has left?”</em>. And now what? What is the treatment? The doctor may indicate a number of therapies that may be effective, but still be unable to tell how much time there is left or what’s the patient’s expectancy to live.</p>
+<p>The aim of this model is helping to provide more accurate data and answer the patient’s question and how the treatment is going to change their life expectancy.</p>
+</div>
+</div>
+<div id="data-preprocessing" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Data Preprocessing</h2>
+<p>We removed columns:</p>
+<ul>
+<li><code>id</code>,</li>
+<li><code>study</code>,</li>
+<li><code>etype</code>,</li>
+<li><code>study</code> - due to the intent of regression modelling of the problem.</li>
+</ul>
+<p>The dataset has been divided into:</p>
+<ul>
+<li>X - all features (without time and rx),</li>
+<li>y - target variable (time),</li>
+<li>treatment - <code>rx</code> variable.</li>
+</ul>
+<p>Distribution of the variable <code>rx</code> is as shown in the <a href="story-uplift-modelling.html#tab:04-rx-distribution">4.2</a> table. This feature has been categorised.</p>
+<table>
+<caption><span id="tab:04-rx-distribution">TABLE 4.2: </span> Number of observations with given treatment type.</caption>
+<thead>
+<tr class="header">
+<th align="center">Levamisole</th>
+<th align="center">Levamisole + 5-FU</th>
+<th align="center">Observation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">620</td>
+<td align="center">608</td>
+<td align="center">630</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="model-1" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Model</h2>
+<p>To predict model we used algorithms from the package <a href="https://github.com/uber/causalml">causalml</a> in Python 3.
+To optimize hyper parameters we used algorithms from the package <a href="https://github.com/hyperopt/hyperopt">hyperopt</a> also in Python 3.
+All notebooks and codes can be found on <a href="https://github.com/aleksandramiesiac/UpliftModelling_Iml_team4">GitHub</a>.</p>
+<p>The final model is <code>XGBTRegressor</code> with parameters summarised in the <a href="story-uplift-modelling.html#tab:04-model-params">4.3</a> table.</p>
+<table style="width: 60%; margin-right: 25%; margin-left: 25%;">
+<caption>
+<span id="tab:04-model-params">TABLE 4.3: </span>Final set of parameters used in our model.
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Parameter
+</th>
+<th style="text-align:left;">
+Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+colsample_bytree
+</td>
+<td style="text-align:left;">
+0.8336948571372381
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+gamma
+</td>
+<td style="text-align:left;">
+0.5564260515876811
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+learning_rate
+</td>
+<td style="text-align:left;">
+0.9327196556867555
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+max_depth
+</td>
+<td style="text-align:left;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+min_child_weight
+</td>
+<td style="text-align:left;">
+0.45533158266464746
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+n_estimators
+</td>
+<td style="text-align:left;">
+200
+</td>
+</tr>
+</tbody>
+</table>
+<p>This gives as Average Treatment(Lev) Effect <span class="math inline">\(74.38\)</span> and Average Treatment(Lev+5-FU) Effect <span class="math inline">\(185.69\)</span>.</p>
+<p>The average treatment effect (ATE) is a measure used to compare treatments in randomized experiments, evaluation of medical trials. The ATE measures the difference in mean outcomes between units assigned to the treatment and units assigned to the control. In a randomized trial the average treatment effect can be estimated from a sample using a comparison in mean outcomes for treated and untreated units.
+The treatment effect for individual <span class="math inline">\(i\)</span> is given by <span class="math inline">\(y_{1}(i)-y_{0}(i)=\beta(i)\)</span>. In the general case, there is no reason to expect this effect to be constant across individuals. The average treatment effect is given by the equation <a href="story-uplift-modelling.html#eq:04-ate">(4.1)</a>.</p>
+<p><span class="math display" id="eq:04-ate">\[\begin{equation} 
+    ATE = \frac{1}{N}\sum_{i}y_{1}(i)-y_{0}(i)
+    \tag{4.1}
+\end{equation}\]</span></p>
+<p>Where the sum in the <a href="story-uplift-modelling.html#eq:04-ate">(4.1)</a> equation performed over all <span class="math inline">\(N\)</span> individuals in the population.</p>
+</div>
+<div id="explanations-2" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Explanations</h2>
+<!--
+    TODO:(oryginał):
+    > Here, show how XAI techniques can be used to solve the problem.
+    > Will dataset specific or instance specific techniques help more?
+    >
+    > Will XAI be useful before (pre), during (in) or after (post) modeling?
+    >
+    > What is interesting to learn from the XAI analysis?
+
+     - Jak w ogóle to wyjaśniać skoro np. możemy mieć dwa modele?
+     - Wizualizacje dopracować (czytelne wykresy, opisy itp.) [ad 4].
+-->
+<div id="dataset-level-explainations" class="section level3" number="4.4.1">
+<h3><span class="header-section-number">4.4.1</span> Dataset Level Explainations</h3>
+<!--
+    TODO: Jaka jest istotność zmiennych?
+-->
+</div>
+<div id="instance-level-explainations" class="section level3" number="4.4.2">
+<h3><span class="header-section-number">4.4.2</span> Instance Level Explainations</h3>
+<p>For the instance level explainations we have decided to focus on a limited number of observations.
+These observations are taken from set which seemed to provide interesting results during the data exploration process.</p>
+<p>The two observations which we have selected can be found in the <a href="story-uplift-modelling.html#tab:04-selected-obs">4.4</a> table.</p>
+<table>
+<caption>
+<span id="tab:04-selected-obs">TABLE 4.4: </span>The two observations selected from the dataset for instance level explainations.
+</caption>
+<thead style="font-size: 87%;">
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+sex
+</th>
+<th style="text-align:center;">
+age
+</th>
+<th style="text-align:center;">
+obstruct
+</th>
+<th style="text-align:center;">
+perfor
+</th>
+<th style="text-align:center;">
+adhere
+</th>
+<th style="text-align:center;">
+nodes
+</th>
+<th style="text-align:center;">
+status
+</th>
+<th style="text-align:center;">
+differ
+</th>
+<th style="text-align:center;">
+extent
+</th>
+<th style="text-align:center;">
+surg
+</th>
+<th style="text-align:center;">
+node4
+</th>
+</tr>
+</thead>
+<tbody style="font-size: 87%;">
+<tr>
+<td style="text-align:left;">
+865
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+68
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+983
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+56
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>Both patients have the same severity of the cancer which is denoted by the <code>extent</code> variable. One of them is a female and the other is male. The older patient’s (<code>age = 68</code>) cancer is adhered to surrounding organs whilst the other’s cancer is not — this is denoted by the <code>adhere</code> variable. Finally, the last difference is in <code>differ</code> variable which is difference between colon cells and cancer cells.</p>
+<p>The Explanations plots have been created for both selected observations. For each of the observations there are two different plots. The reason for two different plots is the fact that <code>XGBTRegressor</code> model underneath creates a model for every treatment. Hence we have got one plot for every treatment type there is – in our case <em>Levamisole(Lev)</em> and <em>Levamisole+5-FluoroUracyl(Lev+5FU)</em> – as seen on figures below.</p>
+<div id="break-down" class="section level4" number="4.4.2.1">
+<h4><span class="header-section-number">4.4.2.1</span> Break Down</h4>
+On the figures
+<div class="figure" style="text-align: center"><span id="fig:BD865"></span>
+<img src="images/04-UL-865BD1.png" alt="Break Down plots for patient with id 865. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment. " width="45%" height="40%" /><img src="images/04-UL-865BD2.png" alt="Break Down plots for patient with id 865. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment. " width="45%" height="40%" />
+<p class="caption">
+FIGURE 4.1: Break Down plots for patient with id 865. The left plot represents model using <em>Levamisole</em> treatment and the right one represents model using <em>Levamisole+5-FluoroUracyl</em> treatment.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:BD983"></span>
+<img src="images/04-UL-983BD1.png" alt="Break Down plots for patient with id 983. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment." width="45%" height="40%" /><img src="images/04-UL-983BD2.png" alt="Break Down plots for patient with id 983. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment." width="45%" height="40%" />
+<p class="caption">
+FIGURE 4.2: Break Down plots for patient with id 983. The left plot represents model using <em>Levamisole</em> treatment and the right one represents model using <em>Levamisole+5-FluoroUracyl</em> treatment.
+</p>
+</div>
+</div>
+<div id="lime" class="section level4" number="4.4.2.2">
+<h4><span class="header-section-number">4.4.2.2</span> LIME</h4>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-5"></span>
+<img src="images/04-UL-983Lime1.png" alt="Lime plots for patient with id 865. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment." width="49%" height="20%" /><img src="images/04-UL-983Lime2.png" alt="Lime plots for patient with id 865. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment." width="49%" height="20%" />
+<p class="caption">
+FIGURE 4.3: Lime plots for patient with id 865. The left plot represents model using <em>Levamisole</em> treatment and the right one represents model using <em>Levamisole+5-FluoroUracyl</em> treatment.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-6"></span>
+<img src="images/04-UL-865Lime1.png" alt="Lime plots for patient with id 983. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment." width="49%" height="20%" /><img src="images/04-UL-865Lime2.png" alt="Lime plots for patient with id 983. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment." width="49%" height="20%" />
+<p class="caption">
+FIGURE 4.4: Lime plots for patient with id 983. The left plot represents model using <em>Levamisole</em> treatment and the right one represents model using <em>Levamisole+5-FluoroUracyl</em> treatment.
+</p>
+</div>
+</div>
+<div id="shap" class="section level4" number="4.4.2.3">
+<h4><span class="header-section-number">4.4.2.3</span> SHAP</h4>
+<p>The SHAP plots have been created for both selected observations. For each of the observations there are two different plots. The reason for two different plots is the fact that <code>XGBTRegressor</code> model underneath creates a model for every treatment. Hence we have got one plot for every treatment type there is – in our case <em>Lev</em> and <em>Lev+5FU</em> – as seen on figures <a href="story-uplift-modelling.html#fig:04-SHAP-865">4.5</a> and <a href="story-uplift-modelling.html#fig:04-SHAP-983">4.6</a>.</p>
+<div class="figure" style="text-align: center"><span id="fig:04-SHAP-865"></span>
+<img src="images/04-UL-865SHAP1.png" alt="SHAP plots for patient with id 865. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment." width="49%" /><img src="images/04-UL-865SHAP2.png" alt="SHAP plots for patient with id 865. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment." width="49%" />
+<p class="caption">
+FIGURE 4.5: SHAP plots for patient with id 865. The left plot represents model using <em>Levamisole</em> treatment and the right one represents model using <em>Levamisole+5-FluoroUracyl</em> treatment.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:04-SHAP-983"></span>
+<img src="images/04-UL-983SHAP1.png" alt="SHAP plots for patient with id 983. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment." width="49%" /><img src="images/04-UL-983SHAP2.png" alt="SHAP plots for patient with id 983. The left plot represents model using *Levamisole* treatment and the right one represents model using *Levamisole+5-FluoroUracyl* treatment." width="49%" />
+<p class="caption">
+FIGURE 4.6: SHAP plots for patient with id 983. The left plot represents model using <em>Levamisole</em> treatment and the right one represents model using <em>Levamisole+5-FluoroUracyl</em> treatment.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="summary-and-conclusions-3" class="section level2" number="4.5">
+<h2><span class="header-section-number">4.5</span> Summary and Conclusions</h2>
+<!--
+    TODO:(oryginał):
+    > Here add the most important conclusions related to the XAI analysis.
+    > What did you learn? 
+    > Where were the biggest difficulties?
+    > What else did you recommend?
+
+     - Jakich informacji XAI nam dostarczyło na temat tego problemu?
+     - Jak XAI sprawdza się do wyjaśniania upliftu?
+     - Dlaczego było warto to modelować (konkretnie ten dataset) [ad 5].
+-->
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-04_jaroszewicz_uplift">
+<p>Jaroszewicz, S., and P. Rzepakowski. 2014. “Uplift Modeling with Survival Data.” In <em>ACM Sigkdd Workshop on Health Informatics (Hi-Kdd’14)</em>. New York City, USA.</p>
+</div>
+<div id="ref-04_jaskowski_uplift">
+<p>Jaskowski, Maciej, and Szymon Jaroszewicz. 2012. “Uplift Modeling for Clinical Trial Data.” In.</p>
+</div>
+<div id="ref-04_jaroszewicz_linear">
+<p>Krzysztof, Rudaś, and Szymon Jaroszewicz. 2018. “Linear Regression for Uplift Modeling.” <em>Data Min. Knowl. Discov.</em> 32 (5): 1275–1305.</p>
+</div>
+<div id="ref-04_soltys_ensemble">
+<p>Sołtys, Michał, Szymon Jaroszewicz, and Piotr Rzepakowski. 2015. “Ensemble Methods for Uplift Modeling.” <em>Data Mining and Knowledge Discovery</em> 29 (November). <a href="https://doi.org/10.1007/s10618-014-0383-9">https://doi.org/10.1007/s10618-014-0383-9</a>.</p>
+</div>
+<div id="ref-04_zhao_uplift">
+<p>Zhao, Zhenyu, and Totte Harinen. 2019. “Uplift Modeling for Multiple Treatments with Cost Optimization.” <a href="http://arxiv.org/abs/1908.05372">http://arxiv.org/abs/1908.05372</a>.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="story-hotel-booking.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="story-meps-explainable-predictions-for-healthcare-expenditures.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/lunr.js"></script>
+<script src="libs/gitbook/js/clipboard.min.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/compstat-lmu/iml_methods_limitations/edit/master/04-story-uplift-modelling.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["book.pdf", "book.epub"],
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
